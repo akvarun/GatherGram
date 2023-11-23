@@ -1,23 +1,101 @@
 import { StatusBar } from "expo-status-bar";
-import { Platform, StyleSheet, Image } from "react-native";
+import {
+  Platform,
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+  Alert,
+} from "react-native";
 
 import { View, Text } from "../components/Themed";
-import event from "../assets/data/event.json";
 import { AntDesign } from "@expo/vector-icons";
 import CustomButton from "../components/CustomButton";
-import users from "../assets/data/users.json";
+import { gql, useQuery, useMutation } from "@apollo/client";
+import { useUserId } from "@nhost/react";
+
+const GetEvent = gql`
+  query GetEvent($id: uuid!) {
+    Event_by_pk(id: $id) {
+      id
+      name
+      date
+      description
+      EventAttendee {
+        user {
+          id
+          displayName
+          avatarUrl
+        }
+      }
+    }
+  }
+`;
+
+const JoinEvent = gql`
+  mutation InsertEventAttendee($eventId: uuid!, $userId: uuid!) {
+    insert_EventAttendee(objects: [{ eventId: $eventId, userId: $userId }]) {
+      returning {
+        id
+        userId
+        eventId
+        Event {
+          id
+          EventAttendee {
+            id
+          }
+        }
+      }
+    }
+  }
+`;
 
 export default function ModalScreen({ route }) {
   const id = route?.params?.id;
-  console.log("Rendering event ", id);
+  const userId = useUserId();
 
-  const onJoin = () => {};
+  const { data, loading, error } = useQuery(GetEvent, { variables: { id } });
+  const event = data?.Event_by_pk;
 
-  const displayedUsers = users.slice(0, 5);
+  const [doJoinEvent] = useMutation(JoinEvent);
+
+  const onJoin = async () => {
+    if (joined) {
+      Alert.alert("Already Joined", "You are already registered for this event.");
+    } else {
+      try {
+        await doJoinEvent({ variables: { userId, eventId: id } });
+      } catch (e) {
+        Alert.alert("Already Joined", "You have already registered for this event", error?.message);
+      }
+    }
+  };
+
+ const displayedUsers = (event?.EventAttendee || [])
+  .slice(0, 5)
+  .map((attendee) => attendee.user);
+
+const joined = event?.EventAttendee?.some(
+  (attendee) => attendee.user?.id === userId
+);
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Couldn't find the event</Text>
+        <Text>{error.message}</Text>
+      </View>
+    );
+  }
+
+  if (loading) {
+    return <ActivityIndicator />;
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{event.name}</Text>
+
+      <Text style={styles.description}>{event.description}</Text>
 
       <Text style={styles.time}>
         <AntDesign name="calendar" size={24} color={"black"} />{" "}
@@ -43,11 +121,13 @@ export default function ModalScreen({ route }) {
               { transform: [{ translateX: -15 * displayedUsers.length }] },
             ]}
           >
-            <Text>+{users.length - displayedUsers.length}</Text>
+            <Text>+{event?.EventAttendee?.length - displayedUsers.length}</Text>
           </View>
         </View>
 
-        <CustomButton text="Join the event" onPress={onJoin} />
+        {!joined ? (
+          <CustomButton text="Join the event" onPress={onJoin} />
+        ) : null}
       </View>
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}
@@ -63,9 +143,15 @@ const styles = StyleSheet.create({
     paddingBottom: 25,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
+    fontSize: 40,
+    fontWeight: "Roboto",
     marginVertical: 10,
+    marginTop:20,
+  },
+  description: {
+    fontSize: 16,
+    marginTop:60,
+    marginBottom: 80,
   },
   time: {
     fontSize: 20,

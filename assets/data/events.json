@@ -1,61 +1,61 @@
 {
-  "2023-11-23": [],
-  "2023-11-24": [
+  "2022-11-23": [],
+  "2022-11-24": [
     {
       "id": "1",
-      "name": "BasketBall",
+      "name": "Live: notJust.Hack Kickstart",
       "height": 50,
-      "day": "2023-11-24"
+      "day": "2022-11-24"
     }
   ],
-  "2023-11-25": [
+  "2022-11-25": [
     {
       "id": "2",
-      "name": "Football",
+      "name": "Workshop: Build any mobile application with React Native",
       "height": 50,
-      "day": "2023-11-25"
+      "day": "2022-11-25"
     },
     {
       "id": "3",
       "name": "Q&A session",
       "height": 50,
-      "day": "2023-11-25"
+      "day": "2022-11-25"
     }
   ],
-  "2023-11-26": [
+  "2022-11-26": [
     {
       "id": "4",
-      "name": "Swimming",
+      "name": "Workshop: Build a Chat application in hours using Stream",
       "height": 50,
-      "day": "2023-11-26"
+      "day": "2022-11-26"
     },
     {
       "id": "5",
       "name": "Q&A session",
       "height": 50,
-      "day": "2023-11-26"
+      "day": "2022-11-26"
     }
   ],
-  "2023-11-27": [
+  "2022-11-27": [
     {
       "id": "6",
-      "name": "Hockey",
+      "name": "Workshop: Build Full-Stack applications with Nhost",
       "height": 50,
-      "day": "2023-11-27"
+      "day": "2022-11-27"
     },
     {
       "id": "7",
-      "name": "Badminton",
+      "name": "Q&A session",
       "height": 50,
-      "day": "2023-11-27"
+      "day": "2022-11-27"
     }
   ],
-  "2023-11-28": [
+  "2022-11-28": [
     {
       "id": "8",
-      "name": "Meet up",
+      "name": "Demo Day",
       "height": 50,
-      "day": "2023-11-28"
+      "day": "2022-11-28"
     }
   ]
 }

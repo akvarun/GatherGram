@@ -1,9 +1,20 @@
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import useCachedResources from './hooks/useCachedResources';
-import useColorScheme from './hooks/useColorScheme';
-import Navigation from './navigation';
+import useCachedResources from "./hooks/useCachedResources";
+import useColorScheme from "./hooks/useColorScheme";
+import Navigation from "./navigation";
+
+import { NhostClient, NhostReactProvider } from "@nhost/react";
+import { NhostApolloProvider } from "@nhost/react-apollo";
+import * as SecureStore from "expo-secure-store";
+
+const nhost = new NhostClient({
+  subdomain: "gqpfksjqxtqhisfiuccj",
+  region: "eu-central-1",
+  clientStorageType: "expo-secure-storage",
+  clientStorage: SecureStore,
+});
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -14,7 +25,11 @@ export default function App() {
   } else {
     return (
       <SafeAreaProvider>
-        <Navigation colorScheme={colorScheme} />
+        <NhostReactProvider nhost={nhost}>
+          <NhostApolloProvider nhost={nhost}>
+            <Navigation colorScheme={colorScheme} />
+          </NhostApolloProvider>
+        </NhostReactProvider>
         <StatusBar />
       </SafeAreaProvider>
     );

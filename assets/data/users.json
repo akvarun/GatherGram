@@ -1,13 +1,18 @@
 [
   {
     "id": "u1",
-    "avatarUrl": "https://instagram.fixm4-3.fna.fbcdn.net/v/t51.2885-19/311696119_972031457044374_8214019989254504623_n.jpg?stp=dst-jpg_e0_s320x320&cb=efdfa7ed-ac1ee5b6&efg=eyJxZV9ncm91cHMiOiJbXCJpZ19ianBnX3Byb2ZpbGVfcGljXzA5MTFfdGVzdC0wXCJdIn0&_nc_ht=instagram.fixm4-3.fna.fbcdn.net&_nc_cat=106&_nc_ohc=PgoUFeocbcoAX-jUXhK&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfCO_RXPCbJI4wjQ78V1TPqXgNhKWf69mBABNHyvGmjpig&oe=6504D035&_nc_sid=8b3546",
-    "displayName": "Varun A K"
+    "avatarUrl": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/vadim.jpg",
+    "displayName": "Vadim Savin"
   },
   {
     "id": "u2",
-    "avatarUrl": "https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=W6K0C_QAAAAJ&citpid=1",
-    "displayName": "Guru Prakash J"
+    "avatarUrl": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/elon.png",
+    "displayName": "Elon Musk"
+  },
+  {
+    "id": "u3",
+    "avatarUrl": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/jeff.jpeg",
+    "displayName": "Jeff"
   },
   {
     "id": "u4",
@@ -16,13 +21,23 @@
   },
   {
     "id": "u5",
-    "avatarUrl": "https://instazoom.cc/img/16/1694537689674902421681817.jpg",
-    "displayName": "Sri Haari"
+    "avatarUrl": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/6.png",
+    "displayName": "Alexandra"
   },
   {
     "id": "u6",
-    "avatarUrl": "https://instagram.fbeg4-1.fna.fbcdn.net/v/t51.2885-19/310115052_190333783460244_4850166413197757037_n.jpg?_nc_ht=instagram.fbeg4-1.fna.fbcdn.net&_nc_cat=100&_nc_ohc=rYoUFA59ij0AX8VpAi9&edm=AEF8tYYBAAAA&ccb=7-5&oh=00_AfCtyMsfOwPg6Aooq-qk7_7J6BRiDCJx4Q4oOMtB8m3zCg&oe=6504F2D7&_nc_sid=1e20d2",
-    "displayName": "RajKumar"
+    "avatarUrl": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/biahaze.jpg",
+    "displayName": "Lukas"
+  },
+  {
+    "id": "u7",
+    "avatarUrl": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/graham.jpg",
+    "displayName": "Daniil PR"
+  },
+  {
+    "id": "u8",
+    "avatarUrl": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/11.png",
+    "displayName": "Catalin Editor"
   },
   {
     "id": "u9",

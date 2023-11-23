@@ -1,12 +1,46 @@
-import { StyleSheet, Text, Pressable, Alert } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  Pressable,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import { View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
-import { Agenda, AgendaEntry } from "react-native-calendars";
-import events from "../assets/data/events.json";
+import { Agenda, AgendaEntry, AgendaSchedule } from "react-native-calendars";
+import { gql, useQuery } from "@apollo/client";
+
+const GetEvents = gql`
+  query GetEvents {
+    Event {
+      id
+      name
+      date
+      
+    }
+  }
+`;
+
+const getEventsSchedule = (events: []): AgendaSchedule => {
+  const items: AgendaSchedule = {};
+
+  events.forEach((event) => {
+    const day = event.date.slice(0, 10);
+
+    if (!items[day]) {
+      items[day] = [];
+    }
+    items[day].push({ ...event, day, height: 50 });
+  });
+
+  return items;
+};
 
 export default function TabOneScreen({
   navigation,
 }: RootTabScreenProps<"TabOne">) {
+  const { data, loading, error } = useQuery(GetEvents);
+
   const renderItem = (reservation: AgendaEntry, isFirst: boolean) => {
     const fontSize = isFirst ? 16 : 14;
     const color = isFirst ? "black" : "#43515c";
@@ -29,11 +63,21 @@ export default function TabOneScreen({
     );
   };
 
+  if (loading) {
+    return <ActivityIndicator />;
+  }
+
+  if (error) {
+    Alert.alert("Error fetching events", error.message);
+  }
+
+  const events = getEventsSchedule(data.Event);
+
   return (
     <View style={styles.container}>
       <Agenda
         items={events}
-        selected="2023-11-24"
+        selected="2023-10-17"
         renderItem={renderItem}
         renderEmptyDate={renderEmptyDate}
       />

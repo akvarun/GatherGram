@@ -1,3 +1,8 @@
+/**
+ * If you are not familiar with React Navigation, refer to the "Fundamentals" guide:
+ * https://reactnavigation.org/docs/getting-started
+ *
+ */
 import { FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
@@ -7,7 +12,7 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { ColorSchemeName, Pressable } from "react-native";
+import { ActivityIndicator, ColorSchemeName, Pressable } from "react-native";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
@@ -17,6 +22,7 @@ import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import TabOneScreen from "../screens/TabOneScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
+import TabThreeScreen from "../screens/TabThreeScreen";
 import UsersScreen from "../screens/UsersScreen";
 import {
   RootStackParamList,
@@ -24,6 +30,7 @@ import {
   RootTabScreenProps,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
+import { useAuthenticationStatus } from "@nhost/react";
 
 export default function Navigation({
   colorScheme,
@@ -40,10 +47,18 @@ export default function Navigation({
   );
 }
 
+/**
+ * A root stack navigator is often used for displaying modals on top of all other content.
+ * https://reactnavigation.org/docs/modal
+ */
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
-  const isAuthenticated = true;
+  const { isAuthenticated, isLoading } = useAuthenticationStatus();
+
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
 
   if (!isAuthenticated) {
     return (
@@ -82,6 +97,10 @@ function RootNavigator() {
   );
 }
 
+/**
+ * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
+ * https://reactnavigation.org/docs/bottom-tab-navigator
+ */
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
@@ -98,7 +117,7 @@ function BottomTabNavigator() {
         name="TabOne"
         component={TabOneScreen}
         options={({ navigation }: RootTabScreenProps<"TabOne">) => ({
-          title: "Events",
+          title: "Home",
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerRight: () => (
             <Pressable
@@ -119,16 +138,27 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="TabTwo"
+        component={TabThreeScreen}
+        options={{
+          title: "Create Event",
+          tabBarIcon: ({ color }) => <TabBarIcon name="plus" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="TabThree"
         component={TabTwoScreen}
         options={{
           title: "Profile",
-          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="info" color={color} />,
         }}
       />
     </BottomTab.Navigator>
   );
 }
 
+/**
+ * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
+ */
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
