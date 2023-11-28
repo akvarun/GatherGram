@@ -1,11 +1,14 @@
 import { StatusBar } from "expo-status-bar";
+import React from "react";
 import {
   Platform,
   StyleSheet,
   Image,
   ActivityIndicator,
   Alert,
+  FlatList,
 } from "react-native";
+import UserListItem from "../components/UserListItem";
 
 import { View, Text } from "../components/Themed";
 import { AntDesign } from "@expo/vector-icons";
@@ -58,25 +61,31 @@ export default function ModalScreen({ route }) {
 
   const [doJoinEvent] = useMutation(JoinEvent);
 
+  const displayedUsers = (event?.EventAttendee || [])
+    .slice(0, 5)
+    .map((attendee) => attendee.user);
+
+  const joined = event?.EventAttendee?.some(
+    (attendee) => attendee.user?.id === userId
+  );
   const onJoin = async () => {
     if (joined) {
-      Alert.alert("Already Joined", "You are already registered for this event.");
+      Alert.alert(
+        "Already Joined",
+        "You are already registered for this event."
+      );
     } else {
       try {
         await doJoinEvent({ variables: { userId, eventId: id } });
       } catch (e) {
-        Alert.alert("Already Joined", "You have already registered for this event", error?.message);
+        Alert.alert(
+          "Already Joined",
+          "You have already registered for this event",
+          error?.message
+        );
       }
     }
   };
-
- const displayedUsers = (event?.EventAttendee || [])
-  .slice(0, 5)
-  .map((attendee) => attendee.user);
-
-const joined = event?.EventAttendee?.some(
-  (attendee) => attendee.user?.id === userId
-);
 
   if (error) {
     return (
@@ -90,6 +99,17 @@ const joined = event?.EventAttendee?.some(
   if (loading) {
     return <ActivityIndicator />;
   }
+  // Flatten the array of arrays into a single array of user objects
+  const flattenedUsers = displayedUsers.flat();
+
+  // Log flattened users array
+  console.log("Flattened Users:", flattenedUsers);
+
+  // Log user details for each user
+  flattenedUsers.forEach((user) => {
+    console.log("User Details:", user);
+    console.log("Avatar URL:", user?.avatarUrl || "N/A");
+  });
 
   return (
     <View style={styles.container}>
@@ -105,7 +125,7 @@ const joined = event?.EventAttendee?.some(
       <View style={styles.footer}>
         {/* User avatars */}
         <View style={styles.users}>
-          {displayedUsers.map((user, index) => (
+          {flattenedUsers.map((user, index) => (
             <Image
               key={user.id}
               source={{ uri: user.avatarUrl }}
@@ -144,23 +164,26 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 40,
-    fontWeight: "Roboto",
+    fontWeight: "bold",
     marginVertical: 10,
-    marginTop:20,
+    marginTop: 20,
   },
   description: {
     fontSize: 16,
-    marginTop:60,
-    marginBottom: 80,
+    marginTop: 20,
+    marginBottom: 20,
   },
   time: {
     fontSize: 20,
   },
   footer: {
     marginTop: "auto",
+    alignItems: "center",
   },
   users: {
     flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
   },
   userAvatar: {
     width: 50,
@@ -172,5 +195,10 @@ const styles = StyleSheet.create({
     backgroundColor: "gainsboro",
     justifyContent: "center",
     alignItems: "center",
+  },
+  joinedText: {
+    fontSize: 16,
+    marginTop: 10,
+    color: "gray",
   },
 });
