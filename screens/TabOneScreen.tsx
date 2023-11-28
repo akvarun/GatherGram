@@ -16,7 +16,6 @@ const GetEvents = gql`
       id
       name
       date
-      
     }
   }
 `;
@@ -40,7 +39,8 @@ export default function TabOneScreen({
   navigation,
 }: RootTabScreenProps<"TabOne">) {
   const { data, loading, error } = useQuery(GetEvents);
-
+  const today = new Date(); // Get the current date
+  const formattedToday = today.toISOString().slice(0, 10);
   const renderItem = (reservation: AgendaEntry, isFirst: boolean) => {
     const fontSize = isFirst ? 16 : 14;
     const color = isFirst ? "black" : "#43515c";
@@ -77,7 +77,7 @@ export default function TabOneScreen({
     <View style={styles.container}>
       <Agenda
         items={events}
-        selected="2023-10-17"
+        selected={formattedToday}
         renderItem={renderItem}
         renderEmptyDate={renderEmptyDate}
       />
