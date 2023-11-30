@@ -3,8 +3,14 @@ import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
 import { gql, useMutation } from "@apollo/client";
 
 const CREATE_EVENT = gql`
-  mutation InsertEvent($name: String!, $description: String, $date: timestamptz) {
-    insert_Event(objects: { name: $name, description: $description, date: $date }) {
+  mutation InsertEvent(
+    $name: String!
+    $description: String
+    $date: timestamptz
+  ) {
+    insert_Event(
+      objects: { name: $name, description: $description, date: $date }
+    ) {
       affected_rows
     }
   }
@@ -14,12 +20,15 @@ export default function CreateEventPage() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
 
   const [createEvent] = useMutation(CREATE_EVENT);
 
   const handleCreateEvent = () => {
+    const dateTime = `${date}T${time}:00+00:00`;
+
     createEvent({
-      variables: { name, description, date },
+      variables: { name, description, date: dateTime },
     })
       .then((result) => {
         if (result.data.insert_Event.affected_rows > 0) {
@@ -49,11 +58,18 @@ export default function CreateEventPage() {
         onChangeText={(text) => setDescription(text)}
       />
 
-      <Text style={styles.label}>Event Date</Text>
+      <Text style={styles.label}>Event Date (YYYY-MM-DD)</Text>
       <TextInput
         style={styles.input}
         placeholder="Enter event date"
         onChangeText={(text) => setDate(text)}
+      />
+
+      <Text style={styles.label}>Event Time (HH:MM)</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter event time"
+        onChangeText={(text) => setTime(text)}
       />
 
       <Button title="Create Event" onPress={handleCreateEvent} />

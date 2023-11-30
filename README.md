@@ -23,5 +23,3 @@
 ## To run the application
 
 `npm start`
-
-## Expo Go instruction
