@@ -76,6 +76,9 @@ export default function ModalScreen({ route }) {
           "Event Full",
           "The event is already full. You cannot join."
         );
+      } else if (new Date(event.date) < new Date()) {
+        // Check if the event date is in the past
+        Alert.alert("Event Expired", "You cannot join past events.");
       } else {
         const isUserAlreadyJoined = flattenedUsers.some(
           (attendee) => attendee.id === userId
