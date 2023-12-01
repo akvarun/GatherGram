@@ -68,21 +68,40 @@ export default function ModalScreen({ route }) {
   const joined = event?.EventAttendee?.some(
     (attendee) => attendee.user?.id === userId
   );
+  const flattenedUsers = displayedUsers.flat();
   const onJoin = async () => {
-    if (joined) {
-      Alert.alert(
-        "Already Joined",
-        "You are already registered for this event."
-      );
-    } else {
-      try {
-        await doJoinEvent({ variables: { userId, eventId: id } });
-      } catch (e) {
+    try {
+      if (flattenedUsers.length >= 5) {
+        Alert.alert(
+          "Event Full",
+          "The event is already full. You cannot join."
+        );
+      } else {
+        const isUserAlreadyJoined = flattenedUsers.some(
+          (attendee) => attendee.id === userId
+        );
+
+        if (isUserAlreadyJoined) {
+          Alert.alert(
+            "Already Joined",
+            "You are already registered for this event."
+          );
+        } else {
+          await doJoinEvent({ variables: { userId, eventId: id } });
+        }
+      }
+    } catch (error) {
+      if (error.message.includes("Uniqueness violation")) {
         Alert.alert(
           "Already Joined",
-          "You have already registered for this event",
-          error?.message
+          "You have already registered for this event."
         );
+      } else {
+        Alert.alert(
+          "Join Error",
+          "There was an error while attempting to join the event."
+        );
+        console.error("Join Error:", error);
       }
     }
   };
@@ -100,8 +119,8 @@ export default function ModalScreen({ route }) {
     return <ActivityIndicator />;
   }
   // Flatten the array of arrays into a single array of user objects
-  const flattenedUsers = displayedUsers.flat();
 
+  console.log(displayedUsers);
   // Log flattened users array
   console.log("Flattened Users:", flattenedUsers);
 
