@@ -23,3 +23,12 @@
 ## To run the application
 
 `npm start`
+
+## Convert to apk file using eas
+
+- To generate an .apk, modify the eas.json
+- Change the build type to "buildType": "apk"
+
+## Run your build with the command
+
+`eas build -p android --profile preview`
